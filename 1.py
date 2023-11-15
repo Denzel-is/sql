@@ -1,43 +1,28 @@
 import psycopg2
+import csv
 
 
 
-
-def binarySearch(unames, x, low, high):
-
-    while low <= high:
-        mid = low + (high - low)//2
-
-        if unames[mid] == x:
-            return mid
-
-        elif unames[mid] < x:
-            low = mid + 1
-
-        else:
-            high = mid - 1
-
-    return -1
 
 conn = psycopg2.connect(
     host='localhost',
-    database='SUBD',
+    database='2',
     user='postgres',
     password='123',
     port='5432'
 )
 
 cur = conn.cursor()
-cur.execute("SELECT name FROM fruits LIMIT 5;")
-unames = [r[0] for r in cur.fetchall()]
+cur.execute("SELECT * FROM college_teacher LIMIT 5;")
+results = cur.fetchall()
+print(results)
+    
 
-uname = input("Enter your login (name of the fruit): ")
-found = binarySearch(unames, uname)
+with open('результат5.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    csvwriter = csv.writer(csvfile)
+    csvwriter.writerows(results)
 
-if found:
-    print("You have it in the list.")
-else:
-    print("You do not have it in the list.")
+
 
 cur.close()
 conn.close()
